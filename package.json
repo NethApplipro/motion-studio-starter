@@ -1,0 +1,56 @@
+{
+  "name": "motion-studio-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Studio motion design réutilisable : Remotion, React, rendus déterministes et contrôles qualité.",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "studio": "remotion studio",
+    "check": "node scripts/check.mjs",
+    "stills": "node scripts/stills.mjs",
+    "render": "node scripts/render-all.mjs",
+    "critic": "node scripts/critic.mjs",
+    "determinism": "node scripts/determinism.mjs",
+    "new-film": "node scripts/new-film.mjs",
+    "ref": "node scripts/ref.mjs",
+    "sfx": "node scripts/sfx.mjs",
+    "icons": "node scripts/build-icons.mjs",
+    "typecheck": "tsc --noEmit",
+    "qa": "node scripts/qa.mjs",
+    "test": "node --test scripts/*.test.mjs",
+    "verdict": "node scripts/verdict.mjs",
+    "review-page": "node scripts/review-page.mjs",
+    "visual": "node scripts/visual.mjs",
+    "beats": "node scripts/beats.mjs",
+    "voice": "node scripts/voice.mjs",
+    "eval": "node scripts/eval-skill.mjs"
+  },
+  "dependencies": {
+    "@fontsource/poppins": "^5.3.0",
+    "@remotion/bundler": "4.0.534",
+    "@remotion/cli": "4.0.534",
+    "@remotion/fonts": "4.0.534",
+    "@remotion/motion-blur": "^4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "@remotion/zod-types": "4.0.534",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remixicon": "^4.9.1",
+    "remotion": "4.0.534",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "esbuild": "^0.28.1",
+    "jpeg-js": "^0.4.4",
+    "js-yaml": "4.3.2",
+    "pixelmatch": "^5.3.0",
+    "pngjs": "^7.0.0",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

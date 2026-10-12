@@ -1,0 +1,9 @@
+{
+  "_aide": "Voix off optionnelle. at = frame de début (timeline). npm run voice -- <slug> (ou --essai sans clé). Le texte dit est aussi le sous-titre.",
+  "voix": "",
+  "modele": "eleven_multilingual_v2",
+  "lignes": [
+    {"id": "l1", "at": 0, "texte": "Première phrase dite."},
+    {"id": "l2", "at": 120, "texte": "Deuxième phrase dite."}
+  ]
+}

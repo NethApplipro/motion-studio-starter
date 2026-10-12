@@ -1,0 +1,44 @@
+{
+  "_source": "Marque fictive de démonstration, à remplacer avant un projet client.",
+  "name": "Nova",
+  "url": "example.com",
+  "baseline": "Vos idées en mouvement",
+  "colors": {
+    "dark": "#0E0E52",
+    "blue": "#3374FF",
+    "blue20": "#D0DDFF",
+    "blue05": "#ECEEFE",
+    "black": "#121624",
+    "grey80": "#404350",
+    "grey60": "#6E707C",
+    "grey40": "#9B9DA7",
+    "grey20": "#C9CAD3",
+    "grey10": "#E0E1E9",
+    "grey05": "#ECECF4",
+    "white": "#F7F7FF",
+    "green": "#00A878",
+    "green20": "#CCEEE4",
+    "orange": "#DC7224",
+    "red": "#CC2936"
+  },
+  "gradient": "linear-gradient(135deg, #3374FF 0%, #2F62E6 55%, #1E3AA8 100%)",
+  "fonts": {
+    "sans": "Poppins"
+  },
+  "icons": "Remix Icon (remixicon.com)",
+  "radius": {
+    "card": 16,
+    "button": 10,
+    "icon": 10
+  },
+  "logo": {
+    "mark": "brand/logo-mark.svg",
+    "note": "Symbole géométrique fictif. Tracé partagé par le SVG et le composant Logo."
+  },
+  "logoGradient": [
+    "#3374FF",
+    "#2F62E6",
+    "#1A2A8C"
+  ],
+  "logoPath": "M120 520 L335 120 L550 520 Z M220 420 H450"
+}

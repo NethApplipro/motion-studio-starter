@@ -1,0 +1,53 @@
+# Relecture indépendante de chaque PR par Codex (le fabricant ne se relit pas lui-même, cf. AGENTS.md).
+# Prérequis : secret OPENAI_API_KEY dans Settings → Secrets and variables → Actions. Sans secret, le job s'ignore.
+name: Relecture Codex
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  codex:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      HAS_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+    outputs:
+      final_message: ${{ steps.run_codex.outputs.final-message }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Secret absent
+        if: env.HAS_KEY != 'true'
+        run: echo 'OPENAI_API_KEY non configuré, relecture Codex ignorée.'
+      - name: Relecture Codex
+        id: run_codex
+        if: env.HAS_KEY == 'true'
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review.md
+          sandbox: read-only
+          output-file: codex-review.md
+  commentaire:
+    runs-on: ubuntu-latest
+    needs: codex
+    if: needs.codex.outputs.final_message != ''
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          CODEX_FINAL_MESSAGE: ${{ needs.codex.outputs.final_message }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: `### Relecture Codex\n\n${process.env.CODEX_FINAL_MESSAGE}`,
+            });

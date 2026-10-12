@@ -1,0 +1,58 @@
+# Régénère les images de référence des tests visuels DANS l'environnement de la CI (même navigateur que le job `visual`).
+# Les références doivent venir du même navigateur que la vérification : rendues ailleurs (conteneur cloud avec un autre
+# Chromium, poste local), elles diffèrent de ~1 % sur le lissage du texte et le job `visual` échoue sans régression réelle.
+# Déclenchement :
+#   - manuel (Actions → « Références visuelles » → Run workflow, en choisissant la branche) une fois ce fichier sur main ;
+#   - ou un commit poussé sur une branche (hors main) dont le message contient [maj-references-visuelles].
+# Toujours REGARDER ce qui change avant d'accepter : une référence régénérée valide l'image actuelle telle quelle.
+name: Références visuelles
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore: [main]
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: visual-references-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  update:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[maj-references-visuelles]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run setup
+      - run: npm run visual -- --update
+      - name: Committer les références si elles ont changé
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/visual/baseline
+          if git diff --cached --quiet; then
+            echo "Références déjà à jour."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git diff --cached --stat
+            git commit -m "Régénérer les références visuelles dans l'environnement de la CI"
+            git push origin "HEAD:${{ github.ref_name }}"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      # Un push fait avec GITHUB_TOKEN ne déclenche pas les workflows : relancer la qualité motion sur le nouveau commit.
+      - name: Relancer la qualité motion
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run motion-quality.yml --ref "${{ github.ref_name }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: references-visuelles
+          path: tests/visual/actual/
+          retention-days: 7

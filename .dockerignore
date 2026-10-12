@@ -1,0 +1,8 @@
+node_modules
+out
+.git
+reviews/**/*.jpg
+reviews/**/*.png
+tests/visual/actual
+tests/visual/diff
+.env
